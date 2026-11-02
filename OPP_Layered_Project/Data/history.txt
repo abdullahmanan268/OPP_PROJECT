@@ -1,0 +1,8 @@
+﻿Added lost item: Wallet
+Added found item: iPhone
+Added found item: Keys
+Added lost item: Laptop Bag
+Added found item: Watch
+Added found item: ID Card
+Claimed item: Water Bottle
+Added lost item: Earphones
