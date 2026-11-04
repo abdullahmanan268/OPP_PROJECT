@@ -5,7 +5,7 @@ using LostAndFoundCSharp.Services;
 
 namespace LostAndFoundCSharp.UI
 {
-    
+    // All screens related to items
     public class ItemUI
     {
         private ItemService itemService;
@@ -27,7 +27,7 @@ namespace LostAndFoundCSharp.UI
             AddItem("=== ADD FOUND ITEM ===", "found", "Enter Location Found: ", "Found item added successfully!");
         }
 
-        
+        // Used by both lost and found (only status and messages are different)
         private void AddItem(string title, string status, string locationMessage, string successMessage)
         {
             Console.WriteLine(title);
@@ -56,7 +56,7 @@ namespace LostAndFoundCSharp.UI
 
         public void ViewAllItems()
         {
-            Console.WriteLine("=== VIEW ALL ITEMS ===");
+            Console.WriteLine("===  PAGINATED VIEW ALL ITEMS ===");
             Console.WriteLine();
 
             List<Item> items = itemService.GetAll();
@@ -77,34 +77,76 @@ namespace LostAndFoundCSharp.UI
             }
             ConsoleHelper.Pause();
         }
-
-        public void SearchItemByName()
+//change search thing (question 2)
+        public void SearchItems()
         {
-            Console.WriteLine("=== SEARCH ITEM BY NAME ===");
+            Console.WriteLine("=== SEARCH ITEMS ===");
+            Console.WriteLine("You can search by 1,and 2 or all 2 options. Each option shows its own results.");
             Console.WriteLine();
 
-            string name = ConsoleHelper.ReadText("Enter item name to search: ");
-            List<Item> results = itemService.SearchByName(name);
+            
+            bool useStatus = AskYesNo("Search by Status? (y/n): ");
+            bool useRange = AskYesNo("Search by Range? (y/n): ");
 
-            if (results.Count == 0)
+            if ( useStatus == false && useRange == false)
             {
                 Console.WriteLine();
-                Console.WriteLine("Item not found!");
+                Console.WriteLine("Please select at least one search option!");
+                ConsoleHelper.Pause();
+                return;
+            }
+
+            string name = "";
+            string status = "";
+            int from = 0;
+            int to = 0;
+            //change
+           
+            if (useStatus)
+            {
+                status = ConsoleHelper.ReadText("Enter status (lost / found / claimed): ");
+            }
+            if (useRange)
+            {
+                from = ConsoleHelper.ReadNumber("Enter range start number: ");
+                to = ConsoleHelper.ReadNumber("Enter range end number: ");
+
+                if (from < 1 || to < from)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Invalid range!");
+                    ConsoleHelper.Pause();
+                    return;
+                }
+            }
+            //change
+            List<int> results = itemService.Search( useStatus, status, useRange, from, to);
+            List<Item> items = itemService.GetAll();
+           Console.WriteLine("FRONT VIEW");
+
+            Console.WriteLine();
+            if (results.Count == 0)
+            {
+                Console.WriteLine("No record found!");
             }
             else
             {
+                Console.WriteLine("Search Results:");
+                Console.WriteLine("----------------------------------------------------");
                 for (int i = 0; i < results.Count; i++)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("Item Found!");
-                    Console.WriteLine("Name: " + results[i].Name);
-                    Console.WriteLine("Description: " + results[i].Description);
-                    Console.WriteLine("Location: " + results[i].Location);
-                    Console.WriteLine("Date: " + results[i].Date);
-                    Console.WriteLine("Status: " + results[i].Status);
+                    int number = results[i];
+                    Console.WriteLine(number + ". " + items[number - 1]);
                 }
             }
             ConsoleHelper.Pause();
+        }
+
+        // Asks a yes/no question, returns true for y or Y
+        private bool AskYesNo(string message)
+        {
+            string answer = ConsoleHelper.ReadText(message);
+            return answer.Trim().ToLower() == "y";
         }
 
         public void UpdateItem()
@@ -293,7 +335,7 @@ namespace LostAndFoundCSharp.UI
             ConsoleHelper.Pause();
         }
 
-        
+        // Used for lost / found / claimed lists
         public void ViewItemsByStatus(string status, string title, string noMessage)
         {
             Console.WriteLine("=== " + title + " ===");
@@ -319,7 +361,7 @@ namespace LostAndFoundCSharp.UI
             ConsoleHelper.Pause();
         }
 
-       
+        // Prints "1. Name (status)" for all items
         private void ShowNameAndStatus()
         {
             List<Item> items = itemService.GetAll();

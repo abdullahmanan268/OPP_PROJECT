@@ -16,10 +16,13 @@ namespace LostAndFoundCSharp.Services
             this.historyService = historyService;
             items = repo.Load();
         }
-
+        //chnage
         public List<Item> GetAll()
         {
-            return items;
+            
+
+           
+            return items; 
         }
 
         public bool IsFull()
@@ -40,14 +43,41 @@ namespace LostAndFoundCSharp.Services
             repo.Save(items);
         }
 
-        public List<Item> SearchByName(string name)
+        //chnage
+        public List<int> Search( bool useStatus, string status,
+                                bool useRange, int from, int to)
         {
-            List<Item> result = new List<Item>();
+            List<int> result = new List<int>();
+
             for (int i = 0; i < items.Count; i++)
             {
-                if (items[i].Name == name)
+                bool match = false;
+                int number = i + 1;
+
+               
+              
+
+                
+               if (useStatus)
                 {
-                    result.Add(items[i]);
+                    if (items[i].Status.ToLower() == status.ToLower())
+                    {
+                        match = true;
+                    }
+               }
+
+                
+                if (useRange)
+                {
+                    if (number >= from && number <= to)
+                    {
+                        match = true;
+                    }
+                }
+
+                if (match)
+                {
+                    result.Add(number);
                 }
             }
             return result;
@@ -79,7 +109,7 @@ namespace LostAndFoundCSharp.Services
             repo.Save(items);
         }
 
-        
+       
         public void SortByName()
         {
             for (int i = 0; i < items.Count - 1; i++)

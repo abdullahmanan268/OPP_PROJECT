@@ -59,8 +59,8 @@ namespace LostAndFoundCSharp.UI
             Console.WriteLine();
             Console.WriteLine("1.  Add Lost Item");
             Console.WriteLine("2.  Add Found Item");
-            Console.WriteLine("3.  View All Items");
-            Console.WriteLine("4.  Search Item by Name");
+            Console.WriteLine("3.   paginated view of all Items");
+            Console.WriteLine("4.  Search Items");
             Console.WriteLine("5.  Update Item");
 
             if (auth.IsAdmin)
@@ -109,7 +109,7 @@ namespace LostAndFoundCSharp.UI
             }
             else if (choice == 4)
             {
-                itemUI.SearchItemByName();
+                itemUI.SearchItems();
             }
             else if (choice == 5)
             {

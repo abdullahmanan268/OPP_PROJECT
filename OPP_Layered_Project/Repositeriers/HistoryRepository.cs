@@ -6,7 +6,7 @@ namespace LostAndFoundCSharp.Repositories
     
     public class HistoryRepository
     {
-        private string path = "Data/history.txt";
+        private string path = DataPath.GetFile("history.txt");
 
         public List<string> Load()
         {

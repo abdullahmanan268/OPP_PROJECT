@@ -7,7 +7,7 @@ namespace LostAndFoundCSharp.Repositories
     
     public class ItemRepository
     {
-        private string path = "Data/items.txt";
+        private string path = DataPath.GetFile("items.txt");
 
         public List<Item> Load()
         {
@@ -19,7 +19,16 @@ namespace LostAndFoundCSharp.Repositories
             }
 
             StreamReader reader = new StreamReader(path);
-            int count = int.Parse(reader.ReadLine());
+            string firstLine = reader.ReadLine();
+
+            
+            if (firstLine == null)
+            {
+                reader.Close();
+                return items;
+            }
+
+            int count = int.Parse(firstLine.Trim());
 
             for (int i = 0; i < count; i++)
             {
@@ -29,6 +38,13 @@ namespace LostAndFoundCSharp.Repositories
                 item.Location = reader.ReadLine();
                 item.Date = reader.ReadLine();
                 item.Status = reader.ReadLine();
+
+                
+                if (item.Status == null)
+                {
+                    break;
+                }
+
                 items.Add(item);
             }
 

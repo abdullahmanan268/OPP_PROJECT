@@ -12,7 +12,7 @@ namespace LostAndFoundCSharp.UI
             this.auth = auth;
         }
 
-       
+        // Returns false if program should exit
         public bool Show()
         {
             ConsoleHelper.PrintHeader();
